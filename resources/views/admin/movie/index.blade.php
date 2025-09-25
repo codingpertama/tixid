@@ -2,6 +2,7 @@
     @section('content')
         <div class="container my-5">
             <div class="d-flex justify-content-end">
+                <a href="{{ route('admin.movies.export') }}" class="btn btn-secondary me-2">Export</a>
                 <a href="{{ route('admin.movies.create') }}" class="btn btn-success">Tambah Data</a>
             </div>
 

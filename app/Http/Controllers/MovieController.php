@@ -6,6 +6,8 @@ use App\Models\Movie;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MovieExport;
 
 class MovieController extends Controller
 {
@@ -222,4 +224,12 @@ class MovieController extends Controller
 
     return redirect()->route('admin.movies.index')->with('success', 'Berhasil menghapus data film!');
 }
+
+    public function exportExcel()
+    {
+        // nama file yang akan terunduh=
+        $fileName = 'data-film.xlsx';
+        // proses download
+        return Excel::download(new MovieExport, $fileName);
+    }
 }

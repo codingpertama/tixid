@@ -56,6 +56,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
         ->name('update');
         Route::delete('/delete/{id}', [CinemaController::class, 'destroy'])
         ->name('delete');
+        Route::get('/export', [CinemaController::class, 'exportExcel'])
+        ->name('export');
     });
 
     //data Pengguna admin dan staff
@@ -72,6 +74,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
         ->name('update');
         Route::delete('/delete/{id}', [UserController::class, 'destroy'])
         ->name('delete');
+        Route::get('/export', [UserController::class, 'exportExcel'])
+        ->name('export');
     });
     Route::prefix('/movies')->name('movies.')->group(function() {
         Route::get('/', [MovieController::class, 'index'])->name('index');
@@ -81,6 +85,7 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
         Route::put('/update/{id}', [MovieController::class, 'update'])->name('update');
         Route::delete('/delete/{id}', [MovieController::class, 'destroy'])->name('delete');
         Route::patch('/toggle/{id}', [MovieController::class, 'toggle'])->name('toggle');
+        Route::get('/export', [MovieController::class, 'exportExcel'])->name('export');
     });
 });
 
@@ -103,5 +108,6 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function()
         Route::get('/edit/{id}', [PromoController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [PromoController::class, 'update'])->name('update');
         Route::delete('/delete/{id}', [PromoController::class, 'destroy'])->name('delete');
+        Route::get('/export', [PromoController::class, 'exportExcel'])->name('export');
     });
 });

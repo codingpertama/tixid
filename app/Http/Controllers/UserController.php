@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\CinemaExport;
+use App\Exports\UserExport;
 
 class UserController extends Controller
 {
@@ -185,5 +188,11 @@ class UserController extends Controller
         } else {
             return redirect()->route('admin.users.index')->with('error', 'User tidak ditemukan');
         }
+    }
+
+    public function exportExcel()
+    {
+        $fileName = 'data-pengguna.xlsx';
+        return Excel::download(new UserExport, $fileName);
     }
 }
