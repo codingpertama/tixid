@@ -23,7 +23,7 @@
                 <label for="type" class="form-label">Tipe Promo :</label>
                 <select name="type" id="type" 
                         class="form-select @error('type') is-invalid @enderror">
-                    <option selected hidden>Pilih</option>
+                    <option value disabled selected hidden>Pilih</option>
                     <option value="percent">%</option>
                     <option value="rupiah">Rupiah</option>
                 </select>

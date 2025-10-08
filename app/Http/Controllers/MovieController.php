@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MovieExport;
+use App\Models\Schedule;
 
 class MovieController extends Controller
 {
@@ -215,6 +216,10 @@ class MovieController extends Controller
      */
     public function destroy($id)
 {
+    $schedules = Schedule::where('movie_id', $id)->count();
+        if ($schedules) {
+            return redirect()->route('admin.movies.index')->with('error', 'tidak dapat menghapus data film data tertaut dengan jadwal tayang');
+        }
     // findorFail() : mencari data berdasarkan id, jika tidak ada akan menampilkan error 404
     // storage::disk('public')->exists() : mengecek apakah file ada di folder storage
     // storage::disk('public')->delete() : menghapus file di folder storage 

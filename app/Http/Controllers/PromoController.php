@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CinemaExport;
 use App\Exports\PromoExport;
+use App\Models\Schedule;
 
 class PromoController extends Controller
 {
@@ -131,5 +132,22 @@ class PromoController extends Controller
     {
         $fileName = 'data-promo.xlsx';
         return Excel::download(new PromoExport, $fileName);
+    }
+
+    public function trash() {
+        $promoTrash = Promo::onlyTrashed()->get(); //karna gak ada tabel relasi jadi gak pake with
+        return view('staff.promo.trash', compact('promoTrash'));
+    }
+
+    public function restore($id) {
+        $promo = Promo::onlyTrashed()->find($id);
+        $promo->restore();
+        return redirect()->route('staff.promos.index')->with('success', 'berhasil mengembalikan data');
+    } 
+
+    public function deletePermanent($id) {
+        $promo = Promo::onlyTrashed()->find($id);
+        $promo->forceDelete();
+        return redirect()->back()->with('success', 'berhasil menghapus permanen');
     }
 }

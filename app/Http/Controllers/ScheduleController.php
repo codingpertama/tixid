@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ScheduleExport;
 use App\Models\Cinema;
 use App\Models\Movie;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ScheduleController extends Controller
 {
@@ -90,24 +92,67 @@ class ScheduleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Schedule $schedule)
+    public function edit(Schedule $schedule, $id)
     {
-        //
+        $schedule = Schedule::where('id', $id)->with(['cinema', 'movie'])->first();
+        return view('staff.schedule.edit', compact('schedule'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Schedule $schedule)
+    public function update(Request $request, Schedule $schedule, $id)
     {
-        //
+        $request->validate([
+            'price' => 'required|numeric',
+            'hours.*' => 'required|date_format:H:i'
+        ], [
+            'price.required' => 'harga harus diisi',
+            'price.numeric' => 'harga harus diisi dengan angka',
+            'hours.*.required' => 'jam tayang harus diisi',
+            'hours.*.date_format' => 'jam tayang harus diisi dengan format jam:menit',
+        ]);
+
+        $updateData = Schedule::where('id', $id)->update([
+            'price' => $request->price,
+            'hours' => $request->hours
+        ]);
+
+        if($updateData) {
+            return redirect()->route('staff.schedules.index')->with('success', 'berhasil mengubah data');
+        } else {
+            return redirect()->back()->with('error', 'gagal coba lagi');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Schedule $schedule)
+    public function destroy(Schedule $schedule, $id)
     {
-        //
+        Schedule::where('id', $id)->delete();
+        return redirect()->route('staff.schedules.index')->with('success', 'berhasil menghapus data');
+    }
+
+    public function trash() {
+        $scheduleTrash = Schedule::with(['cinema', 'movie'])->onlyTrashed()->get();
+        return view('staff.schedule.trash', compact('scheduleTrash'));
+    }
+
+    public function restore($id) {
+        $schedule = Schedule::onlyTrashed()->find($id);
+        $schedule->restore();
+        return redirect()->route('staff.schedules.index')->with('success', 'berhasil mengembalikan data');
+    }
+
+    public function deletePermanent($id) {
+        $schedule = Schedule::onlyTrashed()->find($id);
+        $schedule->forceDelete();
+        return redirect()->back()->with('success', 'berhasil menghapus permanen');
+    }
+
+    public function exportExcel() {
+        $fileName = 'data-schedule.xlsx';
+        return Excel::download(new ScheduleExport, $fileName);
     }
 }

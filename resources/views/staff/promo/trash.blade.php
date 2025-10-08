@@ -1,18 +1,18 @@
 @extends('templates.app')
 
 @section('content')
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    
+@endif
     <div class="container mt-3">
-        @if (Session::get('success'))
-            <div class="alert alert-success">{{ Session::get('success') }}</div>
-        @endif
-
         <div class="d-flex justify-content-end">
-            <a href="{{ route('staff.promos.export') }}" class="btn btn-secondary me-2">Export</a>
-            <a href="{{ route('staff.promos.trash') }}" class="btn btn-secondary me-2">Data Sampah</a>  
-            <a href="{{ route('staff.promos.create') }}" class="btn btn-success">Tambah Data</a>
+            <a href="{{ route('staff.promos.index') }}" class="btn btn-secondary me-2">Kembali</a>
         </div>
 
-        <h5 class="mt-3">Data Promo</h5>
+        <h5 class="mt-3">Data Sampah Promo</h5>
         <table class="table table-bordered">
             <tr>
                 <th>#</th>
@@ -21,7 +21,7 @@
                 <th>Aksi</th>
             </tr>
 
-            @foreach ($promos as $key => $item)
+            @foreach ($promoTrash as $key => $item)
                 <tr>
                     <td>{{ $key + 1 }}</td>
                     <td>{{ $item->promo_code }}</td>
@@ -33,11 +33,15 @@
                         @endif
                     </td>
                     <td class="d-flex gap-1"> 
-                        <a href="{{ route('staff.promos.edit', $item['id']) }}" class="btn btn-primary">Edit</a>
-                        <form action="{{ route('staff.promos.delete', $item['id']) }}" method="POST">
+                        <form action="{{ route('staff.promos.restore', $item->id) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn btn-secondary">Kembalikan</button>
+                        </form>
+                        <form action="{{ route('staff.promos.delete_permanent', $item->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Hapus</button>
+                            <button type="submit" class="btn btn-danger">Hapus Permanen</button>
                         </form>
                     </td>
                 </tr>

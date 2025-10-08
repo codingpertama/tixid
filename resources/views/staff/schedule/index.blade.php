@@ -2,6 +2,8 @@
 @section('content')
     <div class="container my-3">
         <div class="d-flex justify-content-end">
+            <a href="{{ route('staff.schedules.export') }}" class="btn btn-secondary me-2">Export</a>
+            <a href="{{ route('staff.schedules.trash') }}" class="btn btn-secondary me-2">Data Sampah</a>
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">Tambah Data</button>
         </div>
         <h3 class="my-3">Data Jadwal Tayangan</h3>
@@ -20,8 +22,8 @@
                 <tr>
                     <td>{{$key + 1}}</td>
                     {{-- mengambil relasi $item['namarelasi']['data'] --}}
-                    <td>{{ $schedule['cinema']['name'] }}</td>
-                    <td>{{ $schedule['movie']['title'] }}</td>
+                    <td>{{ $schedule['cinema']['name'] ?? '' }}</td>
+                    <td>{{ $schedule['movie']['title'] ?? ''}}</td>
                     <td>
                         <ul>
                             {{-- karna hours array gunakan loop --}}
@@ -31,8 +33,12 @@
                         </ul>
                     </td>
                     <td class="d-flex">
-                        <a href="" class="btn btn-primary">Edit</a>
-                        <button class="btn btn-danger ms-2">Hapus</button>
+                        <a href="{{ route('staff.schedules.edit', $schedule->id) }}" class="btn btn-primary">Edit</a>
+                        <form action="{{ route('staff.schedules.delete', $schedule->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger ms-2">Hapus</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

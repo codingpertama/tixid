@@ -6,6 +6,7 @@ use App\Models\Cinema;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CinemaExport;
+use App\Models\Schedule;
 
 class CinemaController extends Controller
 {
@@ -101,6 +102,10 @@ class CinemaController extends Controller
      */
     public function destroy($id)
     {
+        $schedules = Schedule::where('cinema_id', $id)->count();
+        if ($schedules) {
+            return redirect()->route('admin.cinemas.index')->with('error', 'tidak dapat menghapus data bioskop data tertaut dengan jadwal tayang');
+        }
         // sebelum dihapus, dicari di datanya pake where
         Cinema::where('id', $id)->delete();
         return redirect()->route('admin.cinemas.index')->with('success', 'berhasil hapus data');

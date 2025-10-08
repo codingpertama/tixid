@@ -182,12 +182,13 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        if ($user) {
-            $user->forceDelete(); // hapus beneran dari DB
-            return redirect()->route('admin.users.index')->with('success', 'Berhasil hapus data permanen');
-        } else {
-            return redirect()->route('admin.users.index')->with('error', 'User tidak ditemukan');
-        }
+
+    if ($user) {
+        $user->delete(); // soft delete
+        return redirect()->route('admin.users.index')->with('success', 'Berhasil menghapus data (soft delete)');
+    } else {
+        return redirect()->route('admin.users.index')->with('error', 'User tidak ditemukan');
+    }
     }
 
     public function exportExcel()

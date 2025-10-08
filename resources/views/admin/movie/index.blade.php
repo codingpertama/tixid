@@ -11,6 +11,11 @@
                     {{ Session::get('success') }}
                 </div>
             @endif
+            @if (Session::get('error'))
+                <div class="alert alert-danger">
+                    {{ Session::get('error') }}
+                </div>
+            @endif
 
             <h5 class="mb-3">Data Film</h5>
             <table class="table table-bordered">
