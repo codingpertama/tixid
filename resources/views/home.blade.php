@@ -106,7 +106,7 @@
                 <img src="{{ asset('storage/' . $movie->poster) }}"
                 class="card-img-top" alt="{{ $movie->title }}" style="height: 300px; object-fit: cover;">
                 <div class="card-body" style="padding: 0 !important">
-                    <p class="card-text text-center bg-primary py-2"><a href="{{ route('detail', $movie->id) }}"
+                    <p class="card-text text-center bg-primary py-2"><a href="{{ route('schedules.detail', $movie->id) }}"
                         class="text-warning"><b>beli tiket</b></a></p>
                     </div>
                 </div>

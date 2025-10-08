@@ -20,7 +20,7 @@
         <!-- Container wrapper -->
         <div class="container">
             <!-- Navbar brand -->
-            <a class="navbar-brand me-2" href="https://mdbgo.com/">
+            <a class="navbar-brand me-2" href="{{ route('home') }}">
                 <img src="https://asset.tix.id/wp-content/uploads/2021/10/TIXID_logo_blue-300x82.png" height="16"
                     alt="MDB Logo" loading="lazy" style="margin-top: -1px;" />
             </a>
@@ -59,7 +59,7 @@
                         </li>
                     @elseif (Auth::check() && Auth::user()->role == 'staff')
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Jadwal tiket</a>
+                            <a class="nav-link" href="{{ route('staff.schedules.index') }}">Jadwal tiket</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('staff.promos.index') }}">Promo</a>

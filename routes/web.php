@@ -3,19 +3,21 @@
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
-Route::get('/detail', function () {
-    return view('schedule.detail-film');
-})->name('schedule-detail');
+// beranda 
+Route::get('/', [MovieController::class, 'home'])->name('home');
+Route::get('/movies/active', [MovieController::class, 'homeMovies'])->name('home.movies.active');
+
+Route::get('/schedules/{movie_id}', [MovieController::class, 'movieSchedule'])->name('schedules.detail');
+
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
+
 Route::get('/signup', function () {
     return view('auth.signup');
 })->name('signup');
@@ -89,9 +91,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
     });
 });
 
-// beranda 
-Route::get('/', [MovieController::class, 'home'])->name('home');
-Route::get('/movies/active', [MovieController::class, 'homeMovies'])->name('home.movies.active');
+
+
 // detail film
 Route::get('/detail/{id}', [MovieController::class, 'detail'])->name('detail');
 
@@ -109,5 +110,10 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function()
         Route::put('/update/{id}', [PromoController::class, 'update'])->name('update');
         Route::delete('/delete/{id}', [PromoController::class, 'destroy'])->name('delete');
         Route::get('/export', [PromoController::class, 'exportExcel'])->name('export');
+    });
+
+    Route::prefix('/schedules')->name('schedules.')->group(function() {
+        Route::get('/', [ScheduleController::class, 'index'])->name('index');
+        Route::post('store', [ScheduleController::class, 'store'])->name('store');
     });
 });

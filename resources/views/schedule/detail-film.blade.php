@@ -78,32 +78,19 @@
                 </div>
             </div>
             <div class="mb-5">
+                @foreach ($movie['schedules'] as $schedule)
                 <div class="w-100 my-3">
-                    <i class="fa-solid fa-building"></i><b class="ms-2">Lippo Plaza Ekalokasari</b>
+                    <i class="fa-solid fa-building"></i><b class="ms-2">{{$schedule['cinema']['name']}}</b>
                     <br>
-                    <small class="ms-3">Jl. Siliwangi No.123, Sukasarim kec. Bogor Timur, Bogor, Jawa Barat 16134, Lippo
-                        Plaza Ekalokasari Bogor</small>
+                    <small class="ms-3">{{$schedule['cinema']['location']}}</small>
                     <div class="d-flex gap-3 ps-3 my-2">
-                        <div class="btn btn-outline-secondary">11.00</div>
-                        <div class="btn btn-outline-secondary">12.00</div>
-                        <div class="btn btn-outline-secondary">13.00</div>
-                        <div class="btn btn-outline-secondary">14.00</div>
-                        <div class="btn btn-outline-secondary">15.00</div>
+                        @foreach ($schedule['hours'] as $hours)
+                        <div class="btn btn-outline-secondary">{{$hours}}</div>
+                        @endforeach
                     </div>
                 </div>
+                @endforeach
                 <hr>
-                <div class="w-100 my-3">
-                    <i class="fa-solid fa-building"></i><b class="ms-2">Ramayana</b>
-                    <br>
-                    <small class="ms-3">Jl. Raya Tajur, Pakuan, RT04/04, RT.04/RW.04, Muarasari, Kec. Bogor Sel., Kota Bogor, Jawa Barat 16134</small>
-                    <div class="d-flex gap-3 ps-3 my-2">
-                        <div class="btn btn-outline-secondary">11.00</div>
-                        <div class="btn btn-outline-secondary">12.00</div>
-                        <div class="btn btn-outline-secondary">13.00</div>
-                        <div class="btn btn-outline-secondary">14.00</div>
-                        <div class="btn btn-outline-secondary">15.00</div>
-                    </div>
-                </div>
                 <div class="w-100 p-2 bg-light text-center fixed-buttom">
                     <a href=""><i class="fa solid fa-ticket"></i> BELI TIKET</a>
                 </div>

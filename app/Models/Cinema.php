@@ -12,4 +12,11 @@ class Cinema extends Model
 
     // mendaftarkan detail data (column) agar data data tidak bisa diisi
     protected $fillable = ['name', 'location'];
+
+    // mendefinisikan relasi karna schedule nya itu many jadi jamak
+    public function schedules() {
+        // hasMany() = one to many
+        // hasOne() = one to one
+        return $this->hasMany(Schedule::class);
+    }
 }
