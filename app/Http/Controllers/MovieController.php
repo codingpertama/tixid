@@ -36,9 +36,19 @@ class MovieController extends Controller
         return view('home', compact('movies'));
     }
 
-    public function homeMovies()
+    public function homeMovies(Request $request)
     {
-        $movies = Movie::where('actived', 1)->orderBy('created_at', 'desc')->get();
+        // pengambilan data dari input form search
+        //nama inputnya name= search_movie
+        $nameMovie = $request->search_movie;
+        // jika namemovie (input search diisi tidak kosong)
+        if ($nameMovie != "") {
+            // like : mencari data yang mirip atau mengandung teks yang diminta 
+            // % depan : mencari kata belakang, % belakang : mencari kata depan, % depan belakang mencari dari kata depan dan belakang
+            $movies = Movie::where('title', 'LIKE', '%' .$nameMovie. '%')->where('actived', 1)->orderBy('created_at', 'DESC')->get();
+        } else {
+            $movies = Movie::where('actived', 1)->orderBy('created_at', 'DESC')->get();
+        }
         return view('movies', compact('movies'));
     }
 
