@@ -7,6 +7,7 @@
         @endif
         <div class="d-flex justify-content-end">
             <a href="{{ route('admin.users.export') }}" class="btn btn-secondary me-2">Export</a>
+            <a href="{{ route('admin.users.trash') }}" class="btn btn-secondary me-2">Data Sampah</a>  
             <a href="{{ route('admin.users.create') }}" class="btn btn-success">Tambah Data</a>
         </div>
         <h5 class="mt-3">Data Pengguna (Admin & Staff)</h5>

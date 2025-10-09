@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MovieExport;
+use App\Models\Promo;
 use App\Models\Schedule;
 
 class MovieController extends Controller
@@ -242,5 +243,22 @@ class MovieController extends Controller
         $fileName = 'data-film.xlsx';
         // proses download
         return Excel::download(new MovieExport, $fileName);
+    }
+
+    public function trash() {
+        $movieTrash = Movie::onlyTrashed()->get();
+        return view('admin.movie.trash', compact('movieTrash'));
+    }
+
+    public function restore($id) {
+        $movie = Movie::onlyTrashed()->find($id);
+        $movie->restore();
+        return redirect()->route('admin.movies.index')->with('success', 'berhasil mengembalikan data');
+    }
+
+    public function deletePermanent($id) {
+        $movie = Movie::onlyTrashed()->find($id);
+        $movie->forceDelete();
+        return redirect()->back()->with('success', 'berhasil menghapus permanen');
     }
 }

@@ -5,15 +5,10 @@
         @if (Session::get('success'))
             <div class="alert alert-success">{{Session::get('success')}}</div>
         @endif
-        @if (Session::get('error'))
-            <div class="alert alert-danger">{{Session::get('error')}}</div>
-        @endif
         <div class="d-flex justify-content-end">
-            <a href="{{ route('admin.cinemas.export') }}" class="btn btn-secondary me-2">Export</a>
-            <a href="{{ route('admin.cinemas.trash') }}" class="btn btn-secondary me-2">Data Sampah</a>  
-            <a href="{{ route('admin.cinemas.create') }}" class="btn btn-success">Tambah Data</a>
+            <a href="{{ route('admin.cinemas.index') }}" class="btn btn-secondary me-2">Kembali</a>
         </div>
-        <h5 class="mt-3">Data Bioskop</h5>
+        <h5 class="mt-3">Data sampah Bioskop</h5>
         <table class="table table-bordered">
             <tr>
                 <th>#</th>
@@ -23,7 +18,7 @@
             </tr>
             {{-- $cinemas dari compact --}}
             {{-- foreach karena $cinemas pake ::all() datanya lebih dari satu dan berbentuk array --}}
-            @foreach ($cinemas as $key => $item)
+            @foreach ($cinemaTrash as $key => $item)
                 <tr>
                     {{-- $key: index array dari 0 --}}
                     <td>{{$key+1}}</td>
@@ -31,11 +26,15 @@
                     <td>{{$item['name']}}</td>
                     <td>{{$item['location']}}</td>
                     <td class="d-flex"> 
-                        <a href="{{route('admin.cinemas.edit', $item['id'])}}" class="btn btn-secondary">Edit</a>
-                        <form action="{{ route('admin.cinemas.delete', $item['id']) }}" method="POST">
+                        <form action="{{ route('admin.cinemas.restore', $item->id) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn btn-secondary">Kembalikan</button>
+                        </form>
+                        <form action="{{ route('admin.cinemas.delete_permanent', $item->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Hapus</button>
+                            <button type="submit" class="btn btn-danger">Hapus Permanen</button>
                         </form>
                     </td>
                 </tr>

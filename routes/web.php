@@ -81,6 +81,9 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
         ->name('delete');
         Route::get('/export', [UserController::class, 'exportExcel'])
         ->name('export');
+        Route::get('/trash', [UserController::class, 'trash'])->name('trash');
+        Route::patch('/restore/{id}', [UserController::class, 'restore'])->name('restore');
+        Route::delete('/delete-permanent/{id}', [UserController::class, 'deletePermanent'])->name('delete_permanent');
     });
     Route::prefix('/movies')->name('movies.')->group(function() {
         Route::get('/', [MovieController::class, 'index'])->name('index');
@@ -91,6 +94,9 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
         Route::delete('/delete/{id}', [MovieController::class, 'destroy'])->name('delete');
         Route::patch('/toggle/{id}', [MovieController::class, 'toggle'])->name('toggle');
         Route::get('/export', [MovieController::class, 'exportExcel'])->name('export');
+        Route::get('/trash', [MovieController::class, 'trash'])->name('trash');
+        Route::patch('/restore/{id}', [MovieController::class, 'restore'])->name('restore');
+        Route::delete('/delete-permanent/{id}', [MovieController::class, 'deletePermanent'])->name('delete_permanent');
     });
 });
 
