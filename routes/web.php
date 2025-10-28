@@ -86,6 +86,7 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
         Route::delete('/delete-permanent/{id}', [UserController::class, 'deletePermanent'])->name('delete_permanent');
     });
     Route::prefix('/movies')->name('movies.')->group(function() {
+        Route::get('/datatables', [MovieController::class, 'datatables'])->name('datatables');
         Route::get('/', [MovieController::class, 'index'])->name('index');
         Route::get('/create', [MovieController::class, 'create'])->name('create');
         Route::post('/store', [MovieController::class, 'store'])->name('store');

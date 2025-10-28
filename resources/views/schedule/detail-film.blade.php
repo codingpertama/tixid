@@ -5,7 +5,7 @@
         <div class="w-75 d-block m-auto">
             <div class="d-flex">
                 <div style="width: 150px; height:200px;">
-                    <img src="{{ asset('storage/' . $movie->poster) }}"
+                    <img src="{{ asset('storage/' . $movie->poster)  }}"
                         alt="" class="w-100">
                 </div>
                 <div class="ms-5 mt-4">
@@ -66,23 +66,54 @@
                         <li><a href="" class="dropdown-item">Jakarta Barat</a></li>
                     </ul>
                 </div>
+                @php
+                    // ambil query params : request()->get('namaquery')
+                    // kalau di url ada ?sortirharga dan nilainya asc ganti jadi desc
+                    if (request()->get('sortirHarga') == "ASC") {
+                        $sortirHarga = "DESC";
+                    } elseif (request()->get('sortirHarga') == "DESC") {
+                        $sortirHarga = "ASC";
+                    } else {
+                        $sortirHarga = "ASC";
+                    }
+
+                    if (request()->get('sortirAlfabet') == "ASC") {
+                        $sortirAlfabet = "DESC";
+                    } elseif (request()->get('sortirAlfabet') == "DESC") {
+                        $sortirAlfabet = "ASC";
+                    } else {
+                        $sortirAlfabet = "ASC";
+                    }
+
+                    
+                @endphp
                 <div class="dropdown">
                     <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         Sortir
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="" class="dropdown-item">Harga</a></li>
-                        <li><a href="" class="dropdown-item">Alfabet</a></li>
+                        {{-- query params (?) unutk search, sort, limit pake method get atau a href=?--}}
+                        <li><a href="?sortirHarga={{ $sortirHarga }}" class="dropdown-item">Harga</a></li>
+                        <li><a href="?sortirAlfabet={{ $sortirAlfabet }}" class="dropdown-item">Alfabet</a></li>
                     </ul>
                 </div>
             </div>
             <div class="mb-5">
                 @foreach ($movie['schedules'] as $schedule)
                 <div class="w-100 my-3">
-                    <i class="fa-solid fa-building"></i><b class="ms-2">{{$schedule['cinema']['name']}}</b>
-                    <br>
-                    <small class="ms-3">{{$schedule['cinema']['location']}}</small>
+                    <div class="d-flex justify-content-between">
+                        {{-- div kiri --}}
+                        <div>
+                            <i class="fa-solid fa-building"></i><b class="ms-2">{{$schedule['cinema']['name']}}</b>
+                            <br>
+                            <small class="ms-3">{{$schedule['cinema']['location']}}</small>
+                        </div>
+                        {{-- div kanan --}}
+                        <div>
+                            <b>Rp. {{ number_format($schedule['price'], 0, ',', '.') }}</b>
+                        </div>
+                    </div>
                     <div class="d-flex gap-3 ps-3 my-2">
                         @foreach ($schedule['hours'] as $hours)
                         <div class="btn btn-outline-secondary">{{$hours}}</div>

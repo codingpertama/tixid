@@ -15,6 +15,7 @@
                 <th>#</th>
                 <th>Nama Bioskop</th>
                 <th>Judul Film</th>
+                <th>Harga</th>
                 <th>Jam Tayang</th>
                 <th>Aksi</th>
             </tr>
@@ -24,6 +25,7 @@
                     {{-- mengambil relasi $item['namarelasi']['data'] --}}
                     <td>{{ $schedule['cinema']['name'] ?? '' }}</td>
                     <td>{{ $schedule['movie']['title'] ?? ''}}</td>
+                    <td>Rp {{ number_format( $schedule->price , 0 , ',' , '.' ) }}</td>
                     <td>
                         <ul>
                             {{-- karna hours array gunakan loop --}}
