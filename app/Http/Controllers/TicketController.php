@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Schedule;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
+    public function showSeats($scheduleId, $hourId) {
+        $schedule = Schedule::find($scheduleId);
+        // ambil jam yang index nya sesuai params route
+        $hour = $schedule['hours'][$hourId] ?? ''; //kalau tidak ketemu jam nya buat default kosong
+        return view('schedule.row-seats', compact('schedule', 'hour'));
+    }
     /**
      * Display a listing of the resource.
      */

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CinemaExport;
 use App\Exports\UserExport;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
@@ -97,6 +98,24 @@ class UserController extends Controller
     return in_array($user->role, ['admin', 'staff']);
 });
         return view('admin.user.index', compact('users'));
+    }
+
+    public function datatables() {
+        $users = User::query();
+        return DataTables::of($users)
+        ->addIndexColumn()
+        ->addColumn('btnActions', function($user) {
+            $btnEdit = '<a href="' . route('admin.users.edit', $user['id']) . '" class="btn btn-primary me-2">Edit</a>';
+            $btnDelete = '<form action="'. route('admin.users.delete', $user['id']) .'" method="POST">' .
+                                            csrf_field() .
+                                            method_field('DELETE') .'
+                                            <button type="submit" class="btn btn-danger">Hapus</button>
+                                        </form>';
+
+        return '<div class="d-flex gap-2">' . $btnEdit . $btnDelete . '</div>';
+        })
+        ->rawColumns(['btnActions'])
+        ->make(true);
     }
 
     /**

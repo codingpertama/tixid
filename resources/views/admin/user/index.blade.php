@@ -11,7 +11,8 @@
             <a href="{{ route('admin.users.create') }}" class="btn btn-success">Tambah Data</a>
         </div>
         <h5 class="mt-3">Data Pengguna (Admin & Staff)</h5>
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="tableUser">
+            <thead>
             <tr>
                 <th></th>
                 <th>Nama</th>
@@ -19,35 +20,27 @@
                 <th>Role</th>
                 <th>Aksi</th>
             </tr>
-            {{-- $cinemas dari compact --}}
-            @php
-                $no = 1;
-            @endphp
-            {{-- foreach karena $cinemas pake ::all() datanya lebih dari satu dan berbentuk array --}}
-            @foreach ($users as $item)
-                <tr>
-                    <td>{{ $no++ }}</td>
-                    <td>{{ $item->name }}</td>
-                    <td>{{ $item->email }}</td>
-                    <td>
-                        @if ($item->role === 'admin')
-                            <span class="badge bg-primary-subtle text-primary">Admin</span>
-                        @elseif ($item->role === 'staff')
-                            <span class="badge bg-success-subtle text-success">Staff</span>
-                        @endif
-                    </td>
-                    <td class="align-middle text-center">
-                        <div class="d-flex justify-content-center align-items-center gap-2">
-                            <a href="{{ route('admin.users.edit', $item['id']) }}" class="btn btn-info">Edit</a>
-                            <form action="{{ route('admin.users.delete', $item['id']) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Hapus</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            @endforeach
+            </thead>
         </table>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        $(function() {
+            $('#tableUser').DataTable({
+                    processing: true, //tanda load pas lagi proses data
+                    serverSide: true, //data di proses di belakang (controller)
+                    ajax: '{{ route('admin.users.datatables') }}', //memanggul route
+                    columns: [
+                        // urutan <td>
+                        { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                        { data: 'name', name: 'name', orderable: false, searchable: false },
+                        { data: 'email', name: 'email', orderable: true, searchable: true },
+                        { data: 'role', name: 'role', orderable: true, searchable: true},
+                        { data: 'btnActions', name: 'btnActions', orderable: false, searchable: false },
+                    ]
+            })
+        })
+    </script>
+@endpush

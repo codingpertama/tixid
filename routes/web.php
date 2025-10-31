@@ -4,6 +4,7 @@ use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,7 @@ Route::get('/', [MovieController::class, 'home'])->name('home');
 Route::get('/movies/active', [MovieController::class, 'homeMovies'])->name('home.movies.active');
 
 Route::get('/schedules/{movie_id}', [MovieController::class, 'movieSchedule'])->name('schedules.detail');
+Route::get('/schedules/{scheduleId}/hours/{hourId}/ticket', [TicketController::class, 'showSeats'])->name('schedules.show_seats');
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -45,6 +47,7 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
 
     // data film
     Route::prefix('/cinemas')->name('cinemas.')->group(function(){
+        Route::get('/datatables', [CinemaController::class, 'datatables'])->name('datatables');
         Route::get('/', [CinemaController::class, 'index'])
         ->name('index');    
         Route::get('/create', [CinemaController::class, 'create'])
@@ -67,6 +70,7 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
 
     //data Pengguna admin dan staff
     Route::prefix('/user')->name('users.')->group(function() {
+        Route::get('/datatables', [UserController::class, 'datatables'])->name('datatables');
         Route::get('/', [UserController::class, 'index'])
         ->name('index');
         Route::get('/create', [UserController::class, 'create'])
@@ -113,6 +117,7 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function()
     })->name('dashboard');
 
     Route::prefix('/promos')->name('promos.')->group(function() {
+        Route::get('/datatables', [PromoController::class, 'datatables'])->name('datatables');
         Route::get('/', [PromoController::class, 'index'])->name('index');
         Route::get('/create', [PromoController::class, 'create'])->name('create');
         Route::post('/store', [PromoController::class, 'store'])->name('store');
@@ -126,6 +131,7 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function()
     });
 
     Route::prefix('/schedules')->name('schedules.')->group(function() {
+        Route::get('/datatables', [ScheduleController::class, 'datatables'])->name('datatables');
         Route::get('/', [ScheduleController::class, 'index'])->name('index');
         Route::post('store', [ScheduleController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [ScheduleController::class, 'edit'])->name('edit');

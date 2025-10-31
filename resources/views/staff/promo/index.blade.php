@@ -13,35 +13,36 @@
         </div>
 
         <h5 class="mt-3">Data Promo</h5>
-        <table class="table table-bordered">
-            <tr>
-                <th>#</th>
-                <th>Kode Promo</th>
-                <th>Total Potongan</th>
-                <th>Aksi</th>
-            </tr>
-
-            @foreach ($promos as $key => $item)
-                <tr>
-                    <td>{{ $key + 1 }}</td>
-                    <td>{{ $item->promo_code }}</td>
-                    <td>
-                        @if ($item->type == 'percent')
-                            {{ $item->discount }}%
-                        @else
-                            Rp {{ number_format($item->discount, 0, ',', '.') }}
-                        @endif
-                    </td>
-                    <td class="d-flex gap-1"> 
-                        <a href="{{ route('staff.promos.edit', $item['id']) }}" class="btn btn-primary">Edit</a>
-                        <form action="{{ route('staff.promos.delete', $item['id']) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
+        <table class="table table-bordered" id="tablePromo">
+            <thead>
+        <tr>
+            <th>#</th>
+            <th>Kode Promo</th>
+            <th>Diskon</th>
+            <th>Tipe</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
         </table>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        $(function() {
+            $('#tablePromo').DataTable({
+                processing: true, //tanda load pas lagi proses data
+                    serverSide: true, //data di proses di belakang (controller)
+                    ajax: '{{ route('staff.promos.datatables') }}', //memanggul route
+                    columns: [
+                        // urutan <td>
+                        { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                        { data: 'promo_code', name: 'promo_code', orderable: true, searchable: true },
+                        { data: 'discount', name: 'discount', orderable: true, searchable: true },
+                        { data: 'type', name: 'type', orderable: true, searchable: true },
+                        { data: 'btnActions', name: 'btnActions', orderable: false, searchable: false },
+                    ]
+            })
+        })
+    </script>
+@endpush

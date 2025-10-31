@@ -8,6 +8,7 @@ use App\Models\Movie;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\Facades\DataTables;
 
 class ScheduleController extends Controller
 {
@@ -24,6 +25,40 @@ class ScheduleController extends Controller
         $schedules = Schedule::with(['cinema', 'movie'])->get();
 
         return view('staff.schedule.index', compact('cinemas', 'movies', 'schedules'));
+    }
+
+    public function datatables() {
+        $schedules = Schedule::with(['cinema', 'movie'])->get();
+        return DataTables::of($schedules)
+        ->addIndexColumn()
+        ->addColumn('cinema_name', function($schedule) {
+            return $schedule->cinema->name;
+        })
+        ->addColumn('movie_title', function($schedule) {
+            return $schedule->movie->title;
+        })
+        ->addColumn('price', function($schedule) {
+            return 'Rp. ' . number_format($schedule->price, 0, ',', '.');
+        })
+        ->addColumn('hours', function($schedule) {
+            $list = '';
+            foreach($schedule->hours as $hour) {
+                $list .= '<li>' . $hour . '</li>';
+            }
+            return '<ul>' . $list . '</ul>';
+        })
+        ->addColumn('btnActions', function($schedule) {
+            $btnEdit = '<a href="' . route('staff.schedules.edit', $schedule['id']) . '" class="btn btn-primary me-2">Edit</a>';
+            $btnDelete = '<form action="'. route('staff.schedules.delete', $schedule['id']) .'" method="POST">' .
+                            csrf_field() .
+                            method_field('DELETE') .'
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                        </form>';
+
+            return '<div class="d-flex gap-2">' . $btnEdit . $btnDelete . '</div>';
+        })
+        ->rawColumns(['price', 'hours', 'btnActions'])
+        ->make(true);
     }
 
     /**

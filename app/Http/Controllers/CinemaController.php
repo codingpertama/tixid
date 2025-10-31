@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CinemaExport;
 use App\Models\Schedule;
+use Yajra\DataTables\Facades\DataTables;
 
 class CinemaController extends Controller
 {
@@ -20,6 +21,24 @@ class CinemaController extends Controller
         // mengirim data dari controller ke blade : compact()
         // isi compact sama dengan nama variabel 
         return view('admin.cinema.index', compact('cinemas'));
+    }
+
+    public function datatables() {
+        $cinemas = Cinema::query();
+        return DataTables::of($cinemas)
+        ->addIndexColumn()
+        ->addColumn('btnActions', function($cinema) {
+            $btnEdit = '<a href="' . route('admin.cinemas.edit', $cinema['id']) . '" class="btn btn-primary me-2">Edit</a>';
+            $btnDelete = '<form action="'. route('admin.cinemas.delete', $cinema['id']) .'" method="POST">' .
+                                csrf_field() .
+                                method_field('DELETE') .'
+                                <button type="submit" class="btn btn-danger">Hapus</button>
+                        </form>';
+
+        return '<div class="d-flex gap-2">' . $btnEdit . $btnDelete . '</div>';
+        })
+        ->rawColumns(['btnActions'])
+        ->make(true);
     }
 
     /**

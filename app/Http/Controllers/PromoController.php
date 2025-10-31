@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CinemaExport;
 use App\Exports\PromoExport;
 use App\Models\Schedule;
+use Yajra\DataTables\Facades\DataTables;
 
 class PromoController extends Controller
 {
@@ -18,6 +19,31 @@ class PromoController extends Controller
     {
         $promos = Promo::all();
         return view('staff.promo.index', compact('promos'));
+    }
+
+    public function datatables() {
+        $promos = Promo::query()->get();
+        return DataTables::of($promos)
+        ->addIndexColumn()
+        ->addColumn('discount', function($promo) {
+            if ($promo->type == 'percent') {
+                return $promo->discount . '%';
+            } else {
+                return 'Rp ' . number_format($promo->discount, 0, ',', '.');
+            }
+        })
+        ->addColumn('btnActions', function($promo) {
+            $btnEdit = '<a href="' . route('staff.promos.edit', $promo['id']) . '" class="btn btn-primary me-2">Edit</a>';
+            $btnDelete = '<form action="'. route('staff.promos.delete', $promo['id']) .'" method="POST">' .
+                            csrf_field() .
+                            method_field('DELETE') .'
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                        </form>';
+
+            return '<div class="d-flex gap-2">' . $btnEdit . $btnDelete . '</div>';
+        })
+        ->rawColumns(['btnActions'])
+        ->make(true);
     }
 
     /**

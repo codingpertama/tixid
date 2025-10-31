@@ -20,6 +20,7 @@
 
             <h5 class="mb-3">Data Film</h5>
             <table class="table table-bordered" id="tableMovie">
+                <thead>
                 <tr>
                     <th>#</th>
                     <th>Poster</th>
@@ -27,6 +28,7 @@
                     <th>Status Aktif</th>
                     <th>Aksi</th>
                 </tr>
+                </thead>
             </table>
 
             <!-- Modal -->
