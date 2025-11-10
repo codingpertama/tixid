@@ -15,6 +15,9 @@ Route::get('/movies/active', [MovieController::class, 'homeMovies'])->name('home
 
 Route::get('/schedules/{movie_id}', [MovieController::class, 'movieSchedule'])->name('schedules.detail');
 Route::get('/schedules/{scheduleId}/hours/{hourId}/ticket', [TicketController::class, 'showSeats'])->name('schedules.show_seats');
+// menu bioskop pada navbar user 
+Route::get('/cinemas/list', [CinemaController::class, 'cinemaList'])->name('cinemas.list');
+Route::get('/cinemas/{cinema_id}/schedules', [CinemaController::class, 'cinemaSchedules'])->name('cinemas.schedules');
 
 Route::get('/login', function () {
     return view('auth.login');
