@@ -14,7 +14,23 @@ Route::get('/', [MovieController::class, 'home'])->name('home');
 Route::get('/movies/active', [MovieController::class, 'homeMovies'])->name('home.movies.active');
 
 Route::get('/schedules/{movie_id}', [MovieController::class, 'movieSchedule'])->name('schedules.detail');
-Route::get('/schedules/{scheduleId}/hours/{hourId}/ticket', [TicketController::class, 'showSeats'])->name('schedules.show_seats');
+
+Route::middleware('isUser')->group(function() {
+    Route::get('/schedules/{scheduleId}/hours/{hourId}/ticket', [TicketController::class, 'showSeats'])->name('schedules.show_seats');
+    Route::prefix('/tickets')->name('tickets.')->group(function() {
+        Route::post('/', [TicketController::class, 'store'])->name('store');
+        Route::get('/{ticketId}/order', [TicketController::class, 'ticketOrderPage'])->name('order');
+        //pembuatan barcode pembayaran
+        Route::post('/barcode', [TicketController::class, 'createBarcode'])->name('barcode');
+        //halaman yang menampilkan barcode pembayaran
+        Route::get('/{ticketId}/payment', [TicketController::class, 'ticketPaymentPage'])->name('payment.page');
+        Route::patch('/{ticketId}/payment/update', [TicketController::class, 'updateStatusTicket'])->name('payment.update');
+        Route::get('/{ticketId}/show', [TicketController::class, 'show'])->name('show');
+        Route::get('/{ticketId}/export/pdf', [TicketController::class, 'exportPdf'])->name('export.pdf');
+        Route::get('/list', [TicketController::class, 'index'])->name('index');
+    });
+});
+
 // menu bioskop pada navbar user 
 Route::get('/cinemas/list', [CinemaController::class, 'cinemaList'])->name('cinemas.list');
 Route::get('/cinemas/{cinema_id}/schedules', [CinemaController::class, 'cinemaSchedules'])->name('cinemas.schedules');
@@ -43,6 +59,7 @@ Route::get('/logout', [UserController::class, 'logout'])
 // group : mengelompokkan route agar mengikuti sifat sebelumnya (sebelumnya = middleware)
 // prefix() : awalan path, agar /admin ditulis 1 kali tapi bisa digunakan berkali kali
 Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function() {
+    Route::get('/tickets/chart', [TicketController::class, 'dataChart'])->name('tickets.chart');
     // admin dashboard disimpan di group middleware agar dapat menggunakan middleware tsb. 
     Route::get('/dashboard', function () {
         return view('admin.dashboard');

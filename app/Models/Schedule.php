@@ -25,8 +25,13 @@ class Schedule extends Model
         // karna schedule ada di posisi dua gunakan belongsTo untuk menyambungkan
         return $this->belongsTo(Cinema::class);
     }
+    
     public function movie() {
         return $this->belongsTo(Movie::class);
+    }
+
+    public function tickets() {
+        return $this->hasMany(Ticket::class);
     }
 }
 
