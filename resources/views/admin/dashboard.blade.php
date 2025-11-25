@@ -4,11 +4,15 @@
     <div class="container mt-3">
         <h5>Grafik Pembelian Tiket</h5>
         @if (Session::get('success'))
-            <div class="alert alert-success">{{Session::get('success')}} <b>Selamat datang, {{Auth::user()->name}}</b></div>
+            <div class="alert alert-success">{{ Session::get('success') }} <b>Selamat datang, {{ Auth::user()->name }}</b>
+            </div>
         @endif
         <div class="row mt-5">
             <div class="col-6">
                 <canvas id="chartBar"></canvas>
+            </div>
+            <div class="col-6">
+                <canvas id="chartPie"></canvas>
             </div>
         </div>
     </div>
@@ -18,6 +22,7 @@
     <script>
         let labels = null;
         let data = null;
+        let dataPie = null;
 
         $(function() {
             $.ajax({
@@ -31,10 +36,23 @@
                 error: function(err) {
                     alert("gagal mengambil data untuk grafik!");
                 }
+            });
+
+            $.ajax({
+                url: "{{ route('admin.movies.chart') }}",
+                method: "GET",
+                success: function(response) {
+                    dataPie = response.data;
+                    chartPie();
+                },
+                error: function(err) {
+                    alert("gagal mengambil data film untuk grafik");
+                }
             })
         });
 
         const ctx = document.getElementById('chartBar');
+
         function chartBar() {
             new Chart(ctx, {
                 type: 'bar',
@@ -52,6 +70,29 @@
                             beginAtZero: true
                         }
                     }
+                }
+            });
+        }
+
+        const ctx2 = document.getElementById('chartPie');
+
+        function chartPie() {
+            new Chart(ctx2, {
+                type: 'pie',
+                data: {
+                    labels: [
+                        'Film Aktif',
+                        'Film Non-Aktif',
+                    ],
+                    datasets: [{
+                        label: 'Perbandingan Film Aktif dan Non-Aktif',
+                        data: dataPie,
+                        backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                        ],
+                        hoverOffset: 4
+                    }]
                 }
             });
         }
