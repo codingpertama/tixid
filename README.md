@@ -1,61 +1,111 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎟️ TIX ID Clone (Laravel 12)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sebuah aplikasi pemesanan tiket bioskop berbasis web yang terinspirasi dari TIX ID. Proyek ini dibangun menggunakan **Laravel 12** dan mengimplementasikan berbagai fitur esensial seperti pemilihan kursi, pembayaran, pembuatan barcode tiket, hingga manajemen bioskop dengan berbagai hak akses (Admin, Staff, dan User).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Aplikasi ini memiliki sistem otentikasi dan otorisasi dengan tiga peran pengguna (Role):
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1. 👤 User (Pengguna Biasa)
+- **Beranda & Jadwal**: Melihat daftar film yang sedang tayang (aktif) beserta jadwal pemutarannya di berbagai bioskop.
+- **Pemesanan Tiket**: Memilih kursi (seat selection) yang tersedia untuk jadwal tertentu.
+- **Pembayaran**: Melakukan proses pembayaran, di mana sistem akan diintegrasikan dengan pembuatan barcode pembayaran.
+- **Manajemen Tiket**: Melihat riwayat atau daftar tiket yang telah dipesan.
+- **Export PDF**: Mengunduh tiket yang sudah dibayar dalam format PDF.
 
-## Learning Laravel
+### 2. 🛡️ Admin (Administrator)
+- **Dashboard & Analitik**: Melihat grafik (chart) penjualan tiket.
+- **Kelola Data Bioskop (Cinemas)**: CRUD data bioskop, export ke Excel, soft-deletes (Trash/Restore/Permanent Delete).
+- **Kelola Pengguna (Users)**: CRUD data pengguna (admin dan staff), export data, soft-deletes.
+- **Kelola Film (Movies)**: CRUD data film, toggle status aktif/tidak aktif, export data, soft-deletes.
+- Menggunakan **Yajra DataTables** untuk manajemen data yang cepat dan dinamis.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 3. 🎬 Staff
+- **Kelola Promo**: CRUD data promo, export Excel, soft-deletes.
+- **Kelola Jadwal (Schedules)**: Membuat dan mengatur jadwal tayang film di bioskop tertentu, beserta export dan soft-deletes.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠️ Teknologi & Library yang Digunakan
 
-## Laravel Sponsors
+- **Framework:** Laravel 12 (PHP ^8.2)
+- **Frontend:** Blade Templates, TailwindCSS v4, Vite
+- **Database:** MySQL / SQLite
+- **Package Tambahan:**
+  - `barryvdh/laravel-dompdf` (Export Tiket ke PDF)
+  - `maatwebsite/excel` (Export Data ke Excel)
+  - `simplesoftwareio/simple-qrcode` (Pembuatan Barcode / QR Code Tiket)
+  - `yajra/laravel-datatables-oracle` (Integrasi Server-side DataTables)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## ⚙️ Panduan Instalasi (Local Development)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Ikuti langkah-langkah di bawah ini untuk menjalankan proyek ini di perangkat lokal:
 
-## Contributing
+1. **Clone Repository**
+   ```bash
+   git clone <url-repo-anda>
+   cd tixid
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. **Install Dependencies (PHP & Node.js)**
+   ```bash
+   composer install
+   npm install
+   ```
 
-## Code of Conduct
+3. **Konfigurasi Environment**
+   Salin file konfigurasi bawaan dan sesuaikan kredensial database Anda.
+   ```bash
+   cp .env.example .env
+   ```
+   Buka file `.env` dan atur bagian database (misal MySQL):
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=tixid_db
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. **Generate Application Key**
+   ```bash
+   php artisan key:generate
+   ```
 
-## Security Vulnerabilities
+5. **Migrasi Database & Seeder** (Jika ada data dummy)
+   ```bash
+   php artisan migrate --seed
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. **Jalankan Aplikasi**
+   Untuk kemudahan, proyek ini menggunakan *Vite* sebagai build tool. Anda perlu menjalankan server PHP dan Vite secara bersamaan. (Atau gunakan script `npm run dev` jika menggunakan perintah concurrently bawaan).
 
-## License
+   *Terminal 1:*
+   ```bash
+   php artisan serve
+   ```
+   *Terminal 2:*
+   ```bash
+   npm run dev
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+7. **Akses Aplikasi**
+   Buka browser dan navigasi ke: `http://localhost:8000`
+
+---
+
+## 📂 Struktur Direktori Penting
+
+- `app/Http/Controllers/` : Berisi controller utama (MovieController, TicketController, CinemaController, dll).
+- `routes/web.php` : Berisi rute aplikasi yang sudah dibagi berdasarkan middleware (`isUser`, `isAdmin`, `isStaff`).
+- `resources/views/` : File template antarmuka, dibagi menjadi direktori `admin`, `staff`, `auth`, `ticket`, `schedule`, dll.
+
+---
+
+## 📝 Lisensi
+Dibuat untuk tujuan pembelajaran dan pengembangan portfolio. (MIT License - sesuai bawaan Laravel).
